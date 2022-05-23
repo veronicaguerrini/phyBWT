@@ -30,6 +30,7 @@
 #include <deque>	  //std::deque
 
 #define ALF 6
+#define SIZE_BITSET 32
 
 #if SHORT
 	#define MAX_LCP 255
