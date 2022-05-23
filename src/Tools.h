@@ -26,7 +26,8 @@
 #include <numeric>
 #include <malloc.h>
 #include <time.h>
-#include <omp.h>
+#include <bitset>         // std::bitset
+#include <deque>	  //std::deque
 
 #define ALF 6
 
