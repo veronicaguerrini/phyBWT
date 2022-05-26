@@ -490,7 +490,7 @@ int main(int argc, char **argv) {
     //clock_t c_refine=0, c_total=0;
     clock_t c_total=0;
 	
-	if( argc < 4) {
+	if( argc < 7) {
 		fprintf(stderr,"Error usage %s fileFasta fileInfo fileOutput k_min tau t\n",argv[0]); 
 		exit(1);
 	}
