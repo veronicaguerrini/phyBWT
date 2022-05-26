@@ -11,7 +11,7 @@
 #endif
 
 #ifndef PRINT_TABLE
-	#define PRINT_TABLE 1
+	#define PRINT_TABLE 0
 #endif
 
 #ifndef USE_LIST
