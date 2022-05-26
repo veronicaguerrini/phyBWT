@@ -439,8 +439,9 @@ void Partition(leaves in_set,vector<leaves> &out_set,dataTypelenSeq* bufferLCP, 
 	//Take the first top combination sets (as far as they are compatible) and create a partition
 	BuildOutputPartition(table,in_set,out_set);
 	
+	#if CK_2
 	fprintf(stderr,"END Partition --> out_set.size=%lu\n",out_set.size());
-	
+	#endif
 }
 
 void UpdateEdges(leaves &P){
