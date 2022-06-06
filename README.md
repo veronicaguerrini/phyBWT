@@ -37,13 +37,14 @@ make SHORT=0
 The required data structures eBWT, LCP and DA can be built independently from phyBWT. 
 This is a good feature that allows the user to choose the most appropriate tool according to the resources available and the dataset composition (short reads or longer sequences).
 
-For instance, to build .ebwt, .lcp, and .da files from scratch from a single fasta file, one could use BCR [https://github.com/giovannarosone/BCR_LCP_GSA] for short reads, or gsufsort [https://github.com/felipelouza/gsufsort] for longer sequences. Note that gsufsort tool returns the output files with slightly different filename extensions.
+For instance, to build .ebwt, .lcp, and .da files from scratch from a single fasta file, one could use BCR [https://github.com/giovannarosone/BCR_LCP_GSA] for short reads and for longer sequences, gsufsort [https://github.com/felipelouza/gsufsort]. Note that gsufsort tool returns the output files with slightly different filename extensions.
 
-To install BCR and gsufsort for the preprocessing, one could run
+To install and compile BCR and gsufsort for the preprocessing, as well as phyBWT one could run
 
 ```sh
 Install.sh
 ```
+Note that by default the above script compile phyBWt for short reads. To correctly compile phyBWT for longer sequences, the parameter SHORT inside the script must be set to 0.
 
 To obtain the color document array (CDA) from the DA file (fastaFile.da), one could use
 
