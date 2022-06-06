@@ -6,7 +6,7 @@ It applies the properties of the Extended Burrows-Wheeler Transform (EBWT) to th
 In particular, it hinges the combinatorial properties of the *EBWT positional clustering* framework recently introduced , overcoming the limitations of employing *k*-mers with a priori fixed size. 
 Finally, phyBWT infers the tree structure by comparing all the sequences simultaneously, instead of performing their pairwise comparisons.
 
-More formally, let *S={S_1,...,S_n}* be the collection of sequences, phyBWT takes in input:
+Let *S={S_1,...,S_n}* be the input collection of sequences, where each *S_i* is a multiset of strings representing an organism (e.g. sequencing reads, contigs, genome). The tool phyBWT takes as input the following data structures:
 - the extended Burrows–Wheeler transform (ebwt), or multi-string BWT, of collection *S*;
 - the longest common prefix array (lcp) of collection *S*;
 - the color document array (cda) of collection *S*.
