@@ -6,7 +6,7 @@ It applies the properties of the Extended Burrows-Wheeler Transform (EBWT) to th
 In particular, it hinges the combinatorial properties of the *EBWT positional clustering* framework recently introduced , overcoming the limitations of employing *k*-mers with a priori fixed size. 
 Finally, phyBWT infers the tree structure by comparing all the sequences simultaneously, instead of performing their pairwise comparisons.
 
-Let *S={S<sub>1</sub>,...,S<sub>n</sub>}* be the input collection of sequences, where each *S_i* is a multiset of strings representing an organism (e.g. sequencing reads, contigs, genome). The tool phyBWT takes as input the following data structures:
+Let *S={S<sub>1</sub>,...,S<sub>n</sub>}* be the input collection of sequences, where each *S<sub>i</sub>* is a multiset of strings representing an organism (e.g. sequencing reads, contigs, genome). The tool phyBWT takes as input the following data structures:
 - the extended Burrows–Wheeler transform (ebwt), or multi-string BWT, of collection *S*;
 - the longest common prefix array (lcp) of collection *S*;
 - the color document array (cda) of collection *S*.
@@ -50,7 +50,7 @@ To obtain the color document array (CDA) from the DA file (fastaFile.da), one co
 ```sh
 ./create_cda fastaFile fileInfo
 ```
-where fileInfo describes the number of sequences in each multiset *S_i* of the collection *S*.
+where fileInfo describes the number of sequences in each multiset *S<sub>i</sub>* of the collection *S*.
 
 
 ### Quick test
