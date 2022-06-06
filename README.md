@@ -6,6 +6,11 @@ It applies the properties of the Extended Burrows-Wheeler Transform (EBWT) to th
 In particular, it hinges the combinatorial properties of the *EBWT positional clustering* framework recently introduced , overcoming the limitations of employing *k*-mers with a priori fixed size. 
 Finally, phyBWT infers the tree structure by comparing all the sequences simultaneously, instead of performing their pairwise comparisons.
 
+More formally, let *S={S_1,...,S_n}* be the collection of sequences, phyBWT takes in input:
+- the extended Burrows–Wheeler transform (ebwt), or multi-string BWT, of collection *S*;
+- the longest common prefix array (lcp) of collection *S*;
+- the color document array (cda) of collection *S*.
+
 ### Install
 
 ```sh
@@ -27,12 +32,33 @@ while for sequences longer than 250 bp, set SHORT=0
 make SHORT=0
 ```
 
+### Preprocessing steps
+
+The required data structures eBWT, LCP and DA can be built independently from phyBWT. 
+This is a good feature that allows the user to choose the most appropriate tool according to the resources available and the dataset composition (short reads or longer sequences).
+
+For instance, to build .ebwt, .lcp, and .da files from scratch from a single fasta file, one could use BCR [https://github.com/giovannarosone/BCR_LCP_GSA] for short reads, or gsufsort [https://github.com/felipelouza/gsufsort] for longer sequences. Note that gsufsort tool returns the output files with slightly different filename extensions.
+
+To install BCR and gsufsort for the preprocessing, one could run
+
+```sh
+Install.sh
+```
+
+To obtain the color document array (CDA) from the DA file (fastaFile.da), one could use
+
+```sh
+./create_cda fastaFile fileInfo
+```
+where fileInfo describes the number of sequences in each multiset *S_i* of the collection *S*.
+
+
 ### Quick test
 
 After compiling with parameter SHORT=0
 
 ```sh
-./phyBWT prasinovirus/prasinoviruses.fasta prasinovirus/prasinoviruses.txt prasino.out 12 0.5 6
+./phyBWT prasinovirus/prasinoviruses.fasta prasinovirus/prasinoviruses.txt prasino.out 13 0.5 7
 ```
 
 ## References
