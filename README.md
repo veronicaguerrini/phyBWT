@@ -39,12 +39,12 @@ This is a good feature that allows the user to choose the most appropriate tool 
 
 For instance, to build .ebwt, .lcp, and .da files from scratch from a single fasta file, one could use BCR [https://github.com/giovannarosone/BCR_LCP_GSA] for short reads, and for longer sequences, gsufsort [https://github.com/felipelouza/gsufsort]. Note that gsufsort tool returns the output files with slightly different filename extensions.
 
-To install and compile both BCR and gsufsort for the preprocessing step, as well as phyBWT, one could run
+To install and compile both BCR and gsufsort for the preprocessing step, in addition to phyBWT, one could run
 
 ```sh
 Install.sh
 ```
-Note that by default the above script compiles phyBWT for short reads only. To correctly compile phyBWT for longer sequences, the parameter SHORT inside the script must be set to 0.
+Note that by default the above script compiles phyBWT for short reads. To correctly compile phyBWT for longer sequences, the parameter SHORT inside the script must be set to 0.
 
 To obtain the color document array (CDA) from the DA file (fastaFile.da), one could use
 
