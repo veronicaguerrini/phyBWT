@@ -9,12 +9,15 @@
 
 SHORT=1
 
-#Please, modify the following command according to the fasta files path
-PathDataset="./example"
+#Fasta files path
+PathDataset=$1
 
-#Please choose the names of the output files
-InfoFile="example.txt"
-FastaDataset="example.fasta"
+#Output files name
+fastaName=$2
+
+############################
+InfoFile=$fastaName".txt"
+FastaDataset=$fastaName".fasta"
 
 ############################
 #Paths for installed tools
