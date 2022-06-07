@@ -7,9 +7,9 @@ In particular, it hinges the combinatorial properties of the *EBWT positional cl
 Finally, phyBWT infers the tree structure by comparing all the sequences simultaneously, instead of performing their pairwise comparisons.
 
 Let *S={S<sub>1</sub>,...,S<sub>n</sub>}* be the input collection of sequences, where each *S<sub>i</sub>* is a multiset of strings representing an organism (e.g. sequencing reads, contigs, genome). The tool phyBWT takes as input the following data structures:
-- the extended Burrows–Wheeler transform (ebwt), or multi-string BWT, of collection *S*;
-- the longest common prefix array (lcp) of collection *S*;
-- the color document array (cda) of collection *S*.
+- the extended Burrows–Wheeler transform (eBWT), or multi-string BWT, of collection *S*;
+- the longest common prefix array (LCP) of collection *S*;
+- the color document array (CDA) of collection *S*, obtained from the document array (DA) of collection *S*.
 
 ### Install
 
@@ -34,7 +34,7 @@ make SHORT=0
 
 ### Preprocessing steps
 
-The required data structures eBWT, LCP and DA can be built independently from phyBWT. 
+The required data structures eBWT, LCP and CDA can be built independently from phyBWT. 
 This is a good feature that allows the user to choose the most appropriate tool according to the resources available and the dataset composition (short reads or longer sequences).
 
 For instance, to build .ebwt, .lcp, and .da files from scratch from a single fasta file, one could use BCR [https://github.com/giovannarosone/BCR_LCP_GSA] for short reads, and for longer sequences, gsufsort [https://github.com/felipelouza/gsufsort]. Note that gsufsort tool returns the output files with slightly different filename extensions.
@@ -46,13 +46,32 @@ Install.sh
 ```
 Note that by default the above script compiles phyBWT for short reads. To correctly compile phyBWT for longer sequences, the parameter SHORT inside the script must be set to 0.
 
-To obtain the color document array (CDA) from the DA file (fastaFile.da), one could use
+To obtain the color document array CDA from the document array DA (file fastaName.da), one could use
 
 ```sh
-./create_cda fastaFile fileInfo
+./create_cda fastaName fileInfo
 ```
-where fileInfo describes the number of sequences in each multiset *S<sub>i</sub>* of the collection *S*.
+where fileInfo is a tab-separated file that stores per line the number of sequences of each *S<sub>i</sub>* of the collection *S*, according to the format:
 
+*S<sub>i</sub>&emsp;num*
+
+Alternatively, one could run the following script that builds up the three data structures eBWT, LCP and CDA starting from a collection of FASTA files (one for each multiset *S<sub>i</sub>* of the collection *S*) stored in the directory input_directory.
+
+```sh
+Preprocessing.sh input_directory fastaName
+```
+
+The script outputs the three data structures eBWT, LCP and CDA (files fastaName.ebwt, fastaName.lcp and fastaName.cda), and a tab-separated file (fastaName.txt) that stores per line the number of sequences of each *S<sub>i</sub>* of the collection *S* (*i.e.* fileInfo). 
+By default the above script computes the data structures eBWT, LCP and DA by using BCR (preferred choice for constructing the eBWT of short reads). To build them for longer sequences, please change the parameter SHORT inside the script and set it to 0.
+
+### Run
+
+Our alignment-, assembly-, and reference-free method can be run by using:
+
+```sh
+./phyBWT fastaName fileInfo output k_min tau t
+```
+where fastaName is the base name of files fastaName.ebwt, fastaName.lcp and fastaName.cda, while fileInfo is a tab-separated file that stores per line the number of sequences of each *S<sub>i</sub>* of the collection *S*.
 
 ### Quick test
 
