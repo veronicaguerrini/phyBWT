@@ -42,7 +42,7 @@ For instance, to build .ebwt, .lcp, and .da files from scratch from a single fas
 To install and compile both BCR and gsufsort for the preprocessing step, in addition to phyBWT, one could run
 
 ```sh
-Install.sh
+./Install.sh
 ```
 Note that by default the above script compiles phyBWT for short reads. To correctly compile phyBWT for longer sequences, the parameter SHORT inside the script must be set to 0.
 
@@ -58,7 +58,7 @@ where fileInfo is a tab-separated file that stores per line the number of sequen
 Alternatively, one could run the following script that builds up the three data structures eBWT, LCP and CDA starting from a collection of FASTA files (one for each multiset *S<sub>i</sub>* of the collection *S*) stored in the directory input_directory.
 
 ```sh
-Preprocessing.sh input_directory fastaName
+./Preprocessing.sh input_directory fastaName
 ```
 
 The script outputs the three data structures eBWT, LCP and CDA (files fastaName.ebwt, fastaName.lcp and fastaName.cda), and a tab-separated file (fastaName.txt) that stores per line the number of sequences of each *S<sub>i</sub>* of the collection *S* (*i.e.* fileInfo). 
