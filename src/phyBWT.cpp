@@ -75,7 +75,7 @@ int Close(dataTypeNChar ind_start, dataTypeNChar ind_fin, dataTypeNSeq *bufferCD
 		return 0;
 }
 
-int UpdateTable(vector<dataTypeNChar> &partial_sum,dataTypelenSeq w, std::bitset<SIZE_BITSET> &isIn, leaves &inSet){
+int UpdateTable(std::unordered_map<dataTypeNChar,dataTypeNChar> &partial_sum,dataTypelenSeq w, std::bitset<SIZE_BITSET> &isIn, leaves &inSet){
 	//w is the weight to use for updating partial_sum
 	#if CK
 		fprintf(stderr,"\nUpdateTable --> isIn: ");				
@@ -118,7 +118,22 @@ int UpdateTable(vector<dataTypeNChar> &partial_sum,dataTypelenSeq w, std::bitset
 	if(vote && (B_vect.count()<inSet.size()) && (B_vect.count()>1)) {
 		dataTypeNChar index=B_vect.to_ulong();	
 		if(max_minLCP<w)	max_minLCP=w;
-		partial_sum[index]+=w; //Increase vector partial_sum
+		auto search_ele = partial_sum.find(index);
+		if(search_ele != partial_sum.end()){
+			#if CK
+			fprintf(stderr,"Update partial_sum for index = %lu --> search_ele->first: %lu, search_ele-> second: %lu\n",index,search_ele->first,search_ele->second);				
+			#endif
+			search_ele->second = search_ele->second + w;
+			#if CK
+			fprintf(stderr,"Update partial_sum --> search_ele->first: %lu, search_ele-> second: %lu\n",search_ele->first,search_ele->second);				
+			#endif
+		}
+		else{
+			partial_sum.insert({index,w});
+			#if CK
+			fprintf(stderr,"New entry partial_sum for index = %lu --> partial_sum[index]: %lu\n",index,partial_sum[index]);	
+			#endif
+		}
 		return 1;
 	}
 	else return 0;
@@ -158,7 +173,7 @@ dataTypeNChar restrictDS(dataTypelenSeq *out_lcp, dataTypeNSeq *out_cda,dataType
 	return numchar;
 }
 
-dataTypeNChar ClusterAnalysis(vector<dataTypeNChar> &partial_sum,leaves &in_set,dataTypelenSeq* bufferLCP, dataTypeNSeq *bufferCDA,dataTypedimAlpha *buffereBWT, dataTypeNChar *n_clust){
+dataTypeNChar ClusterAnalysis(std::unordered_map<dataTypeNChar,dataTypeNChar> &partial_sum,leaves &in_set,dataTypelenSeq* bufferLCP, dataTypeNSeq *bufferCDA,dataTypedimAlpha *buffereBWT, dataTypeNChar *n_clust){
 	
 	dataTypeNChar nClusters=0;
 	dataTypeNChar numcharLCP=n;
@@ -268,17 +283,18 @@ dataTypeNChar ClusterAnalysis(vector<dataTypeNChar> &partial_sum,leaves &in_set,
 
 void SortTable(vector<dataTypeNChar> &v_in,vector<pair<dataTypeNChar,dataTypeNChar>> &v_out){
 	//Scan table
-	for(dataTypeNChar i=0; i<v_in.size(); i++){
-		if(v_in[i]>0)	v_out.push_back(make_pair(v_in[i],i));
+	for (auto& it : v_in) {
+		v_out.push_back(it);
 	}
 	v_in.clear();
-	sort(v_out.begin(), v_out.end()); //By default sorts on basis of first element of pairs (i.e. score).
+	// Sort using comparator function
+	sort(v_out.begin(), v_out.end(), cmp_function);
 }
 
 #if PRINT_TABLE
 void PrintTable(vector<pair<dataTypeNChar,dataTypeNChar>> &v_in, leaves &set_ele,FILE *OutC){
 	for(dataTypeNChar i=v_in.size(); i>0; i--){
-		std::bitset<SIZE_BITSET> B(v_in[i-1].second);//B bitset for v[i-1].second	
+		std::bitset<SIZE_BITSET> B(v_in[i-1].first);//B bitset for v[i-1].first	
 		for(dataTypeNSeq s=0; s<set_ele.size(); s++){
 			if(B[s]==1){
 				for(dataTypeNSeq k=0; k<set_ele[s].size(); k++){
@@ -287,7 +303,7 @@ void PrintTable(vector<pair<dataTypeNChar,dataTypeNChar>> &v_in, leaves &set_ele
 				}
 			}
 		}
-		fprintf(OutC,"\t%lu\n",v_in[i-1].first);
+		fprintf(OutC,"\t%lu\n",v_in[i-1].second);
 	}
 }
 #endif
@@ -310,12 +326,12 @@ void BuildOutputPartition(vector<pair<dataTypeNChar,dataTypeNChar>> &table,leave
 	dataTypeNChar diff_curr=0;
 	dataTypeNChar diff_next=0;
 	if(table.size()>1)
-		diff_next=table[table.size()-1].first-table[table.size()-2].first;
+		diff_next=table[table.size()-1].second-table[table.size()-2].second;
 	
 	
 	while((!stop) && (num_it<table.size()) && (B.count()<input_set.size()-1)){
 		//max_ele is the maximum combination set among the remaining
-		dataTypeNChar max_ele=table[table.size()-1-num_it].second;
+		dataTypeNChar max_ele=table[table.size()-1-num_it].first;
         
         //max_ele is a valid part for the output partition if
         //1. its elements are not already in a part (i.e. B[s]==0)
@@ -417,11 +433,8 @@ void Partition(leaves in_set,vector<leaves> &out_set,dataTypelenSeq* bufferLCP, 
 #else
 void Partition(leaves in_set,vector<leaves> &out_set,dataTypelenSeq* bufferLCP, dataTypeNSeq *bufferCDA,dataTypedimAlpha *buffereBWT){
 #endif
-	//partial_sum is the vector storing scores for each combination set
-	vector<dataTypeNChar> partial_sum;
-	dataTypeNChar sizeTable=pow(2,in_set.size());
-	for(dataTypeNChar i=0; i<sizeTable; i++) 
-		partial_sum.push_back(0);
+	//partial_sum is a map storing scores for each combination set
+	std::unordered_map<dataTypeNChar,dataTypeNChar> partial_sum;
 	
 	//Detect positional clusters and write Table partial_sum
 	dataTypeNChar n_clust=0;
@@ -438,6 +451,9 @@ void Partition(leaves in_set,vector<leaves> &out_set,dataTypelenSeq* bufferLCP, 
 	
 	//Take the first top combination sets (as far as they are compatible) and create a partition
 	BuildOutputPartition(table,in_set,out_set);
+	
+	//Clear table
+	table.clear();
 	
 	#if CK_2
 	fprintf(stderr,"END Partition --> out_set.size=%lu\n",out_set.size());
