@@ -408,7 +408,7 @@ void BuildOutputPartition(vector<pair<dataTypeNChar,dataTypeNChar>> &table,leave
 		//Check break condition
 		diff_curr=diff_next;
 		if(num_it<table.size()-1){
-			diff_next=table[table.size()-1-num_it].first-table[table.size()-2-num_it].first;
+			diff_next=table[table.size()-1-num_it].second-table[table.size()-2-num_it].second;
 		}
 		
 		if((num_it>max_it) && (diff_curr<=diff_next)){
