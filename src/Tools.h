@@ -66,6 +66,11 @@ typedef unsigned long ulong;
 
 typedef std::vector<std::bitset<SIZE_BITSET>> leaves;
 
+bool cmp_function (std::pair<dataTypeNChar,dataTypeNChar> &i,std::pair<dataTypeNChar,dataTypeNChar> &j) 
+{ 
+	return (i.second<j.second); 
+}
+
 void time_start(time_t *t_time, clock_t *c_clock){
     
 	*t_time = time(NULL);
