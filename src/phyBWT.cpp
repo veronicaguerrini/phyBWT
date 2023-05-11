@@ -281,7 +281,7 @@ dataTypeNChar ClusterAnalysis(std::unordered_map<dataTypeNChar,dataTypeNChar> &p
 	return nClusters;
 }
 
-void SortTable(vector<dataTypeNChar> &v_in,vector<pair<dataTypeNChar,dataTypeNChar>> &v_out){
+void SortTable(std::unordered_map<dataTypeNChar,dataTypeNChar> &v_in,vector<pair<dataTypeNChar,dataTypeNChar>> &v_out){
 	//Scan table
 	for (auto& it : v_in) {
 		v_out.push_back(it);
